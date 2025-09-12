@@ -1,0 +1,31 @@
+server:
+  port: 8091
+spring:
+  application:
+    name: ai-service
+  main:
+    banner-mode: off
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/ai_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+open-ai:
+  api-key:
+  organization-id:
+pgvector:
+  host: localhost
+  port: 5432
+  database: ai_db
+  user: ${spring.datasource.username}
+  password: ${spring.datasource.password}
+  table: document_embedding
+  dimension: 1536
