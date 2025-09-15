@@ -7,7 +7,6 @@ import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiEmbeddingModelName;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.rag.RetrievalAugmentor;
-import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.pgvector.DefaultMetadataStorageConfig;
@@ -26,6 +25,18 @@ public class EmbeddingConfig {
     public static final String DOCUMENT_FILE_NAME = "file_name";
     private static final String DOCUMENT_FILE_NAME_METADATA_COL_DEF = DOCUMENT_FILE_NAME + " varchar(256) not null";
     private static final double MIN_SCORE = 0.7;
+
+    @Bean
+    RetrievalAugmentor retrievalAugmentor(EmbeddingModel embeddingModel,
+                                          EmbeddingStore<TextSegment> embeddingStore) {
+        return DefaultRetrievalAugmentor.builder()
+                .contentRetriever(EmbeddingStoreContentRetriever.builder()
+                        .embeddingStore(embeddingStore)
+                        .embeddingModel(embeddingModel)
+                        .minScore(MIN_SCORE)
+                        .build())
+                .build();
+    }
 
     @Bean
     EmbeddingModel embeddingModel(@Value("${open-ai.api-key}") String apiKey) {
@@ -52,22 +63,6 @@ public class EmbeddingConfig {
                 .password(password)
                 .table(table)
                 .dimension(dimension)
-                .build();
-    }
-
-    @Bean
-    RetrievalAugmentor retrievalAugmentor(EmbeddingModel embeddingModel,
-                                          EmbeddingStore<TextSegment> embeddingStore) {
-        return DefaultRetrievalAugmentor.builder()
-                .contentRetriever(contentRetriever(embeddingModel, embeddingStore))
-                .build();
-    }
-
-    private ContentRetriever contentRetriever(EmbeddingModel embeddingModel, EmbeddingStore<TextSegment> embeddingStore) {
-        return EmbeddingStoreContentRetriever.builder()
-                .embeddingStore(embeddingStore)
-                .embeddingModel(embeddingModel)
-                .minScore(MIN_SCORE)
                 .build();
     }
 

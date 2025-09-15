@@ -18,6 +18,9 @@ public class ChatConversationEntity {
     @Column(name = "conversation_id", nullable = false)
     private String conversationId;
 
+    @Column(name = "user_id", nullable = false)
+    private String userId;
+
     @Lob
     @Column(name = "messages", columnDefinition = "TEXT")
     private String messages;

@@ -19,7 +19,7 @@ class ChatMemoryStoreImpl implements ChatMemoryStore {
     @Transactional(readOnly = true)
     public List<ChatMessage> getMessages(Object memoryId) {
         ChatMemoryId chatMemoryId = (ChatMemoryId) memoryId;
-        return repository.getMessagesAsJsonString(chatMemoryId.conversationId())
+        return repository.getMessagesAsJsonString(chatMemoryId.conversationId(), chatMemoryId.userId())
                 .map(ChatMessageDeserializer::messagesFromJson)
                 .orElseGet(List::of);
     }
@@ -31,6 +31,7 @@ class ChatMemoryStoreImpl implements ChatMemoryStore {
 
         ChatConversationEntity entity = new ChatConversationEntity();
         entity.setConversationId(chatMemoryId.conversationId());
+        entity.setUserId(chatMemoryId.userId());
         entity.setMessages(ChatMessageSerializer.messagesToJson(messages));
         entity.setUpdateTs(LocalDateTime.now());
 
@@ -41,7 +42,7 @@ class ChatMemoryStoreImpl implements ChatMemoryStore {
     @Transactional
     public void deleteMessages(Object memoryId) {
         ChatMemoryId chatMemoryId = (ChatMemoryId) memoryId;
-        repository.deleteByConversationId((chatMemoryId.conversationId()));
+        repository.deleteByConversationIdAndUserId(chatMemoryId.conversationId(), chatMemoryId.userId());
     }
 
 }

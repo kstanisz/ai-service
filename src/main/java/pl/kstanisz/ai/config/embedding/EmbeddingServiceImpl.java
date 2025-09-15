@@ -7,10 +7,6 @@ import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.filter.Filter;
-import dev.langchain4j.store.embedding.filter.MetadataFilterBuilder;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,21 +32,12 @@ class EmbeddingServiceImpl implements EmbeddingService {
 
     @Override
     public void addDocumentEmbeddings(DocumentData documentData) {
-        final String fileName = documentData.name();
-
-        removeDocumentEmbeddings(fileName);
-
-        List<TextSegment> segments = DOCUMENT_SPLITTER.split(asDocument(documentData));
+        Document document = asDocument(documentData);
+        List<TextSegment> segments = DOCUMENT_SPLITTER.split(document);
         for (TextSegment segment : segments) {
             Embedding embedding = embeddingModel.embed(segment).content();
             embeddingStore.add(embedding, segment);
         }
-    }
-
-    private void removeDocumentEmbeddings(String fileName) {
-        Filter metadataFilter = MetadataFilterBuilder.metadataKey(DOCUMENT_FILE_NAME)
-                .isEqualTo(fileName);
-        embeddingStore.removeAll(metadataFilter);
     }
 
     private Document asDocument(DocumentData documentData) {

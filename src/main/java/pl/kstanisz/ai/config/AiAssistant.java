@@ -14,6 +14,7 @@ public interface AiAssistant {
             Twoim zadaniem jest wspieranie pracowników poprzez udzielanie informacji
             zgodnie z polityką firmy i zasadami bezpieczeństwa danych.
             Bądź uprzejmy i rzeczowy. Odpowiadaj krótko, bez zbędnych komentarzy.
+            Jeśli nie znasz odpowiedzi na zadane pytanie, poinformuj o tym użytkownika.
             Obecna data to {{currentDate}}
             """)
     @InputGuardrails(EmployeeIdGuardrail.class)

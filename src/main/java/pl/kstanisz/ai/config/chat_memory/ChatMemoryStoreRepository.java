@@ -9,9 +9,9 @@ import java.util.Optional;
 @Repository
 public interface ChatMemoryStoreRepository extends JpaRepository<ChatConversationEntity, String> {
 
-    @Query("select c.messages from ChatConversationEntity c where c.conversationId = :conversationId")
-    Optional<String> getMessagesAsJsonString(String conversationId);
+    @Query("select c.messages from ChatConversationEntity c where c.conversationId = :conversationId and c.userId = :userId")
+    Optional<String> getMessagesAsJsonString(String conversationId, String userId);
 
-    void deleteByConversationId(String conversationId);
+    void deleteByConversationIdAndUserId(String conversationId, String userId);
 
 }
