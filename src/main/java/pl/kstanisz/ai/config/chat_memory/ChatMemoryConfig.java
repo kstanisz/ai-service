@@ -18,9 +18,9 @@ public class ChatMemoryConfig {
 
     @Bean
     ChatMemoryProvider chatMemoryProvider(ChatMemoryStore chatMemoryStoreService) {
-        return conversationId ->
+        return memoryId ->
                 MessageWindowChatMemory.builder()
-                        .id(conversationId)
+                        .id(memoryId)
                         .maxMessages(MAX_CONTEXT_WINDOW_MESSAGES)
                         .chatMemoryStore(chatMemoryStoreService)
                         .build();

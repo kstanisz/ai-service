@@ -28,11 +28,9 @@ public class EmbeddingConfig {
     private static final double MIN_SCORE = 0.7;
 
     @Bean
-    EmbeddingModel embeddingModel(@Value("${open-ai.api-key}") String apiKey,
-                                  @Value("${open-ai.organization-id}") String organizationId) {
+    EmbeddingModel embeddingModel(@Value("${open-ai.api-key}") String apiKey) {
         return OpenAiEmbeddingModel.builder()
                 .apiKey(apiKey)
-                .organizationId(organizationId)
                 .modelName(OpenAiEmbeddingModelName.TEXT_EMBEDDING_3_SMALL)
                 .build();
     }
@@ -74,8 +72,7 @@ public class EmbeddingConfig {
     }
 
     private MetadataStorageConfig metadataStorageConfig() {
-        return DefaultMetadataStorageConfig
-                .builder()
+        return DefaultMetadataStorageConfig.builder()
                 .storageMode(MetadataStorageMode.COLUMN_PER_KEY)
                 .columnDefinitions(List.of(DOCUMENT_FILE_NAME_METADATA_COL_DEF))
                 .build();
