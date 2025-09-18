@@ -16,7 +16,7 @@ public class AiTools {
 
     private static final Map<String, Integer> EMPLOYEE_AVAILABLE_LEAVE_DAYS = new HashMap<>(
             Map.of(
-                    "EMP_12345", 10,
+                    "EMP_12345", 7,
                     "EMP_23456", 3,
                     "EMP_34567", 1
             )
@@ -36,8 +36,8 @@ public class AiTools {
             Po zarejestrowaniu urlopu nie trzeba już informować przełożonego. Dostanie informację mailem.
             """)
     public int requestLeave(@ToolMemoryId ChatMemoryId chatMemoryId,
-                            @P("Data rozpoczęcia urlopu") LocalDate leaveStartDate,
-                            @P("Data zakończenia urlopu") LocalDate leaveEndDate) {
+                            @P("Data pierwszego dnia urlopu") LocalDate leaveStartDate,
+                            @P("Data ostatniego dnia urlopu") LocalDate leaveEndDate) {
         String employeeId = chatMemoryId.userId();
         int availableLeaveDays = EMPLOYEE_AVAILABLE_LEAVE_DAYS.get(employeeId);
         int requestedLeaveDays = (int) ChronoUnit.DAYS.between(leaveStartDate, leaveEndDate) + 1;
