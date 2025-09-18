@@ -1,9 +1,7 @@
 package pl.kstanisz.ai.config;
 
 import dev.langchain4j.service.*;
-import dev.langchain4j.service.guardrail.InputGuardrails;
 import pl.kstanisz.ai.config.chat_memory.ChatMemoryId;
-import pl.kstanisz.ai.config.guardrail.EmployeeIdGuardrail;
 
 import java.time.LocalDate;
 
@@ -17,7 +15,6 @@ public interface AiAssistant {
             Jeśli nie znasz odpowiedzi na zadane pytanie, poinformuj o tym użytkownika.
             Obecna data to {{currentDate}}
             """)
-    @InputGuardrails(EmployeeIdGuardrail.class)
     Result<String> sendMessage(@MemoryId ChatMemoryId chatMemoryId, @UserMessage String prompt, @V("currentDate") LocalDate currentDate);
 
 }
